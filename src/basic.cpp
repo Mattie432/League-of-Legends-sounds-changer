@@ -49,6 +49,7 @@ string currentLangName;
 string currentLangCode;
 string desiredLangName;
 string desiredLangCode;
+//TODO wukong may be monkeyking?
 string champions[] = {
   "Aatrox",
   "Ahri",
@@ -338,7 +339,7 @@ int DeleteDirectory(const std::string &refcstrRootDirectory,
   return 0;
 }
 
-void copy(string src, string dst)
+int copy(string src, string dst)
 {
   SHFILEOPSTRUCTA sf;
   int result;
@@ -357,66 +358,59 @@ void copy(string src, string dst)
 
   result = SHFileOperationA(&sf);
   cout << "Result: " << result << endl << endl;
+  return result;
 }
 
-//
-///
-//
-//
-//
-//
-//TODO!!!
+
 void changeGameCharacter()
 {
-  string str = leaguePath + "\\RADS\\projects\\lol_air_client\\releases";
-  cout << str << endl;
-  DirTraveler traveler;
-  vector<string>foo;
-  foo = traveler.travelDirectory(str);
-  for (int i=2; i<foo.size(); ++i){
-      string folder = foo[i].c_str();
-      //cout << folder << endl;
+  string currentClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + currentLangCode ;
+  string desiredClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + desiredLangCode ;
 
-      string newPath = str + "\\" + folder + "\\deploy\\assets\\sounds\\";
-      //cout << "new path = " << newPath << endl;
-      BOOL ansCurrentLang = DirectoryExists((newPath + currentLangCode).c_str());
-      BOOL ansDesiredLang = DirectoryExists((newPath + desiredLangCode).c_str());
+  cout << "Folder 1 " << currentClientFolder << endl;
+  cout << "Folder 2 " << desiredClientFolder << endl;
 
-      cout << "Currently changing the announcer sounds to " << desiredLang << endl;
+  if(dirExists(currentClientFolder)){
+    if(dirExists(desiredClientFolder)){
+      //both folders exist;
+      int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
+      cout << "Size of champ array is " << numOfChamps << endl;
 
-      if(ansCurrentLang == 1 && DirectoryExists((newPath + currentLangCode + "_BACKUP").c_str()) != 1){
-        cout << "Creating a backup of " << currentLangCode << " file." << endl;
-        //folders found
-          // If backup not exist, backup.
-          copy(newPath + currentLangCode, newPath + currentLangCode + "_BACKUP");
-      }else{
 
-          cout << "Backup of " << currentLangCode << " already exists." << endl;
+      DirTraveler traveler;
+      //Array of fodlers in current folder
+      vector<string> foo;
+      traveler.travelDirectoryRecursiveReturnFolders(currentClientFolder,&foo);
+      for (int i=2; i<foo.size(); ++i){
+        string folder = foo[i].c_str();
+        cout << "Checking folder : " << folder << endl;
+
+        //Check if its a champion folder
+        for (int i=0; i<numOfChamps; i++){
+          string name = champions[i];
+          if(folder.find(name) != std::string::npos){
+            //if found exit loop
+            i = numOfChamps;
+            cout << "Found champ folder for " << name << endl;
+            string folderPath = folder.substr(0,folder.find(name)) + name;
+            cout << "At path : " << folderPath << endl << endl;
+
+            
+
+          }
+
+        }
       }
 
-      if(ansDesiredLang == 1){
-        //copy((newPath + desiredLangCode), (newPath + currentLangCode));;
-        cout << "Copying " << desiredLangCode << " to " << currentLang << "." << endl;
+      //END both folders exist;
+    }else {
+      cout << "Could not find desired language folder : " << desiredClientFolder << endl;
+      pause();
+    }
+  }else{
+    cout << "Could not find current language folder : " << currentClientFolder << endl;
+    pause();
 
-        int del = DeleteDirectory(newPath + currentLangCode);
-        if(del != 0){
-          cout << "Error deleting " << currentLangCode << ", code: " << del << endl;
-        }
-        Sleep(2000);
-        int cpy = copy(newPath + desiredLangCode, newPath + currentLangCode);
-        if(cpy != 0){
-          cout << "Error copying " << desiredLangCode << ", code: " << del << endl;
-        }else{
-          cout << "Copy complete" << endl;
-        }
-        cout << "Finished changing the champion select sounds." << endl << endl;
-        cout <<  "--------------------------------------------------------------------------------" << endl;
-      }else{
-        cout << "ERROR: could not find folders;" << endl;
-        cout << newPath + currentLangCode << endl;
-        cout << newPath + desiredLangCode << endl;
-        pause();
-      }
   }
 
 }
@@ -437,7 +431,7 @@ void changeChampSelectSounds()
       BOOL ansCurrentLang = DirectoryExists((newPath + currentLangCode).c_str());
       BOOL ansDesiredLang = DirectoryExists((newPath + desiredLangCode).c_str());
 
-      cout << "Currently changing the announcer sounds to " << desiredLang << endl;
+      cout << "Currently changing the announcer sounds to " << desiredLangName << endl;
 
       if(ansCurrentLang == 1 && DirectoryExists((newPath + currentLangCode + "_BACKUP").c_str()) != 1){
         cout << "Creating a backup of " << currentLangCode << " file." << endl;
@@ -451,7 +445,7 @@ void changeChampSelectSounds()
 
       if(ansDesiredLang == 1){
         //copy((newPath + desiredLangCode), (newPath + currentLangCode));;
-        cout << "Copying " << desiredLangCode << " to " << currentLang << "." << endl;
+        cout << "Copying " << desiredLangCode << " to " << currentLangCode << "." << endl;
 
         int del = DeleteDirectory(newPath + currentLangCode);
         if(del != 0){

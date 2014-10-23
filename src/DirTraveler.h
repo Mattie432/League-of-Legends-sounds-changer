@@ -10,7 +10,8 @@ class DirTraveler
         DirTraveler();
         virtual ~DirTraveler();
         vector<string> travelDirectory(string directory);
-        void travelDirectoryRecursive(string directory, vector<string> *fullList);
+        void travelDirectoryRecursiveReturnFolders(string directory, vector<string> *fullList);
+        void travelDirectoryRecursiveReturnFiles(string directory, vector<string> *fullList);
     protected:
     private:
 };

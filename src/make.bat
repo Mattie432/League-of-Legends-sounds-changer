@@ -1,6 +1,6 @@
 @echo off
 g++ basic.cpp -o basic.exe
-echo;
+echo:
 SET Input=
 SET /P Input="Start the compiled program? (y/n)"
 
