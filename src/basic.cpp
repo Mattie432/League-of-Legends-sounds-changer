@@ -395,7 +395,7 @@ void changeGameCharacter()
             string folderPath = folder.substr(0,folder.find(name)) + name;
             cout << "At path : " << folderPath << endl << endl;
 
-            
+
 
           }
 
@@ -790,23 +790,43 @@ void cls(){
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
-    string *currentLang = currentLangSelection("CURRENT");
-    currentLangName = currentLang[0];
-    currentLangCode = currentLang[1];
-    cls();
-    string *desiredLang = currentLangSelection("DESIRED");
-    desiredLangName = desiredLang[0];
-    desiredLangCode = desiredLang[1];
-    cls();
-    leaguePath = getFolder();
-    cls();
-    downloadFiles();
-    cls();
-    soundInt = soundSelection();
-    cls();
-    processTransfer();
+    bool debug = false;
+
+    for(int i = 0; i < argc; i++){
+      cout << "argv[" << i << "] = " << argv[i] << endl;
+      string str = argv[i];
+      if (str == "debug"){
+        cout << "Im here" << endl;
+        currentLangCode = "en_GB";
+        currentLangName = "English";
+        desiredLangCode = "de_DE";
+        desiredLangName = "German";
+        leaguePath = "C:\\Games\\League of Legends";
+        soundInt = 2;
+        debug = true;
+        processTransfer();
+      }
+    }
+
+    if (debug == false){
+      string *currentLang = currentLangSelection("CURRENT");
+      currentLangName = currentLang[0];
+      currentLangCode = currentLang[1];
+      cls();
+      string *desiredLang = currentLangSelection("DESIRED");
+      desiredLangName = desiredLang[0];
+      desiredLangCode = desiredLang[1];
+      cls();
+      leaguePath = getFolder();
+      cls();
+      downloadFiles();
+      cls();
+      soundInt = soundSelection();
+      cls();
+      processTransfer();
+    }
     pause();
     return 0;
 }
