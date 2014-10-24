@@ -13,6 +13,8 @@
 #include <string>
 #include <iostream>
 #include "DirTraveler.cpp"
+#include <algorithm>
+#include <vector>
 #include <list>
 #define _OPEN_SYS
 #include <dirent.h>
@@ -41,6 +43,7 @@ void pause();
 int soundSelection();
 void processTransfer();
 void copy_folder(char, char);
+vector<string> findChampionFolders(string inDir);
 void traverse(char, int);
 
 //global vars
@@ -49,7 +52,6 @@ string currentLangName;
 string currentLangCode;
 string desiredLangName;
 string desiredLangCode;
-//TODO wukong may be monkeyking?
 string champions[] = {
   "Aatrox",
   "Ahri",
@@ -65,7 +67,7 @@ string champions[] = {
   "Braum",
   "Caitlyn",
   "Cassiopeia",
-  "ChoGath",
+  "Chogath",
   "Corki",
   "Darius",
   "Diana",
@@ -74,7 +76,7 @@ string champions[] = {
   "Elise",
   "Evelynn",
   "Ezreal",
-  "Fiddlesticks",
+  "FiddleSticks",
   "Fiora",
   "Fizz",
   "Galio",
@@ -88,7 +90,6 @@ string champions[] = {
   "Irelia",
   "Janna",
   "JarvanIV",
-  "Vi",
   "Jax",
   "Jayce",
   "Jinx",
@@ -98,9 +99,9 @@ string champions[] = {
   "Katarina",
   "Kayle",
   "Kennen",
-  "KhaZix",
+  "Khazix",
   "KogMaw",
-  "LeBlanc",
+  "Leblanc",
   "LeeSin",
   "Leona",
   "Lissandra",
@@ -157,13 +158,13 @@ string champions[] = {
   "Varus",
   "Vayne",
   "Veigar",
-  "VelKoz",
-  "Vi",
+  "Velkoz",
   "Viktor",
+  "Vi",
   "Vladimir",
   "Volibear",
   "Warwick",
-  "Wukong",
+  "MonkeyKing",
   "Xerath",
   "XinZhao",
   "Yasuo",
@@ -362,6 +363,85 @@ int copy(string src, string dst)
 }
 
 
+
+bool is_not_digit(char c)
+{
+    return !std::isdigit(c);
+}
+
+bool numeric_string_compare(const std::string& s1, const std::string& s2)
+{
+    // handle empty strings...
+    //https://stackoverflow.com/questions/4622516/sorting-stdstrings-with-numbers-in-them
+
+    std::string::const_iterator it1 = s1.begin(), it2 = s2.begin();
+
+    if (std::isdigit(s1[0]) && std::isdigit(s2[0])) {
+        int n1, n2;
+        std::stringstream ss(s1);
+        ss >> n1;
+        ss.clear();
+        ss.str(s2);
+        ss >> n2;
+
+        if (n1 != n2) return n1 < n2;
+
+        it1 = std::find_if(s1.begin(), s1.end(), is_not_digit);
+        it2 = std::find_if(s2.begin(), s2.end(), is_not_digit);
+    }
+
+    return std::lexicographical_compare(it1, s1.end(), it2, s2.end());
+}
+
+
+//  Checks for duplicate champion folders and chooses the one with the highest verion number.
+vector<string> removeChampionFolderDuplicates(vector<string> origList){
+  int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
+  vector<string> newList;
+  //for each champ
+  for (int i=0; i<numOfChamps; i++){
+    vector<string> duplicateList;
+    string name = champions[i];
+    cout << endl << name << endl;
+    //for each path
+    for(int i = 0; i<origList.size(); i++){
+      string path = origList[i];
+      //if patch contaitns champion name
+      if(path.find(name) != std::string::npos){
+        duplicateList.push_back(path);
+        cout << "Adding to dup list " << path << endl;
+      }
+    }
+    cout << "Duplicate list size " << duplicateList.size() << endl;
+    if(duplicateList.size() >= 1){
+      cout << "Before sort " << duplicateList[0] << endl;
+      sort(duplicateList.begin(), duplicateList.end(), numeric_string_compare);
+      cout << "AFter sort " << duplicateList[duplicateList.size()-1] << endl;
+
+      newList.push_back(duplicateList[duplicateList.size()-1]);
+
+    }else{
+      cout << "ERROR: no folder for champion " << name << endl << endl;
+      pause();
+    }
+
+  }
+
+  return newList;
+}
+
+
+string searchVectorFor(string value, vector<string> vector){
+  for(int i=0; i<vector.size(); i++){
+    string item = vector[i];
+    if(item.find(value) != std::string::npos){
+      //found
+      return vector[i];
+    }
+  }
+  return "null";
+}
+
 void changeGameCharacter()
 {
   string currentClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + currentLangCode ;
@@ -372,34 +452,23 @@ void changeGameCharacter()
 
   if(dirExists(currentClientFolder)){
     if(dirExists(desiredClientFolder)){
-      //both folders exist;
+
+      vector<string> currentChampsWithDuplicates = findChampionFolders(currentClientFolder);
+      vector<string> currentChamps = removeChampionFolderDuplicates(currentChampsWithDuplicates);
+
+      vector<string> desiredChampsWithDuplicates = findChampionFolders(desiredClientFolder);
+      vector<string> desiredChamps = removeChampionFolderDuplicates(desiredChampsWithDuplicates);
+
       int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
-      cout << "Size of champ array is " << numOfChamps << endl;
+
+      for(int i=0; i<numOfChamps; i++){
+        string champ = champions[i];
+        string currentPath = searchVectorFor(champ, currentChamps);
+        string desiredPath = searchVectorFor(champ, desiredChamps);
+
+        //TODO Copy current to desired
 
 
-      DirTraveler traveler;
-      //Array of fodlers in current folder
-      vector<string> foo;
-      traveler.travelDirectoryRecursiveReturnFolders(currentClientFolder,&foo);
-      for (int i=2; i<foo.size(); ++i){
-        string folder = foo[i].c_str();
-        cout << "Checking folder : " << folder << endl;
-
-        //Check if its a champion folder
-        for (int i=0; i<numOfChamps; i++){
-          string name = champions[i];
-          if(folder.find(name) != std::string::npos){
-            //if found exit loop
-            i = numOfChamps;
-            cout << "Found champ folder for " << name << endl;
-            string folderPath = folder.substr(0,folder.find(name)) + name;
-            cout << "At path : " << folderPath << endl << endl;
-
-
-
-          }
-
-        }
       }
 
       //END both folders exist;
@@ -412,8 +481,54 @@ void changeGameCharacter()
     pause();
 
   }
+}
+
+
+//finds all the champion subfolders in a folder
+vector<string> findChampionFolders(string inDir){
+  //both folders exist;
+  int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
+  cout << "Size of champ array is " << numOfChamps << endl;
+  vector<string> listOfDoneChamps;
+
+  //Array of fodlers in current folder
+  DirTraveler traveler;
+  vector<string> foo;
+  traveler.travelDirectoryRecursiveReturnFolders(inDir ,&foo);
+  //Look at each folder for champion folders
+  for (int i=2; i<foo.size(); ++i){
+    string folder = foo[i].c_str();
+    //cout << "Checking folder : " << folder << endl;
+
+    //Check if its a champion folder
+    for (int i=0; i<numOfChamps; i++){
+      string name = champions[i];
+      if(folder.find(name) != std::string::npos){
+        //if found exit loop
+        i = numOfChamps;
+        //cout << "Found champ folder for " << name << endl;
+        string folderPath = folder.substr(0,folder.find(name)) + name;
+        //cout << "At path : " << folderPath << endl << endl;
+
+        if (find(listOfDoneChamps.begin(), listOfDoneChamps.end(), folderPath) == listOfDoneChamps.end()){
+          //NOt found in listOfDoneChamps
+          cout << "Adding " << folderPath << endl;
+          listOfDoneChamps.push_back(folderPath);
+        }
+      }
+    }
+  }
+
+  if(listOfDoneChamps.size() != numOfChamps){
+    cout << "ERROR: Number of champs too low, only found " << listOfDoneChamps.size() << " number of champion folders" << endl;
+  }else{
+    cout << "Found all champion folders in : " << inDir << endl;
+  }
+
+  return listOfDoneChamps;
 
 }
+
 
 void changeChampSelectSounds()
 {
@@ -700,8 +815,6 @@ void SearchFolder( TCHAR * path )
 
 
 
-
-
 // returns array with first element the string name of the language
 // and the second is the code ascociate with it.
 //
@@ -793,7 +906,6 @@ void cls(){
 int main(int argc, char* argv[])
 {
     bool debug = false;
-
     for(int i = 0; i < argc; i++){
       cout << "argv[" << i << "] = " << argv[i] << endl;
       string str = argv[i];
