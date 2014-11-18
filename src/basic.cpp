@@ -467,7 +467,8 @@ void changeGameCharacter()
         string desiredPath = searchVectorFor(champ, desiredChamps);
 
         //TODO Copy current to desired
-
+        cout << "Current path" << currentPath << endl;
+        cout << "Desired path" << desiredPath << endl;
 
       }
 
