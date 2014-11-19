@@ -47,6 +47,7 @@ vector<string> findChampionFolders(string inDir);
 void traverse(char, int);
 
 //global vars
+bool debug = false;
 string leaguePath;
 string currentLangName;
 string currentLangCode;
@@ -466,13 +467,24 @@ void changeGameCharacter()
         string currentPath = searchVectorFor(champ, currentChamps);
         string desiredPath = searchVectorFor(champ, desiredChamps);
 
-        //TODO Copy current to desired
-        cout << "Current path" << currentPath << endl;
-        cout << "Desired path" << desiredPath << endl;
+        //Delete old directory
+        int del = DeleteDirectory(desiredPath);
+        if(debug){
+          cout << "Deleting dir " << desiredPath << endl;
+          cout << "Sucsess = " << del << endl;
+          pause();
+        }
 
+        //Replace with new directory
+        int cpy = CopyDirectory(currentPath, desiredPath);
+        if(debug){
+          //TODO Copy current to desired
+          cout << "Current path" << currentPath << endl;
+          cout << "Desired path" << desiredPath << endl;
+          cout << "Copy sucsess? = " << cpy << endl;
+          pause();
+        }
       }
-
-      //END both folders exist;
     }else {
       cout << "Could not find desired language folder : " << desiredClientFolder << endl;
       pause();
@@ -906,7 +918,6 @@ void cls(){
 
 int main(int argc, char* argv[])
 {
-    bool debug = false;
     for(int i = 0; i < argc; i++){
       cout << "argv[" << i << "] = " << argv[i] << endl;
       string str = argv[i];
