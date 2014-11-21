@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <algorithm>
 #include <shlobj.h>
+#include <cstdlib>
 #include <vector>
 using namespace std;
 

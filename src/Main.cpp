@@ -66,6 +66,7 @@ string champions[] = {
   "Jinx",
   "Karma",
   "Karthus",
+  "Kalista",
   "Kassadin",
   "Katarina",
   "Kayle",
@@ -159,8 +160,8 @@ int main(int argc, char* argv[])
         cout << "Im here" << endl;
         currentLangCode = "en_GB";
         currentLangName = "English";
-        desiredLangCode = "de_DE";
-        desiredLangName = "German";
+        desiredLangCode = "it_IT";
+        desiredLangName = "Italian";
         leaguePath = "C:\\Games\\League of Legends";
         soundInt = 2;
         debug = true;
@@ -185,6 +186,7 @@ int main(int argc, char* argv[])
       cls();
       processTransfer();
     }
+    cout << "At the end" << endl;
     pause();
     return 0;
 }
@@ -273,19 +275,20 @@ void changeGameCharacter()
 
       for(int i=0; i<numOfChamps; i++){
         string champ = champions[i];
+        cout << endl << "Current champ: " << champ << endl;
         string currentPath = searchVectorFor(champ, currentChamps);
         string desiredPath = searchVectorFor(champ, desiredChamps);
 
         //Delete old directory
         int del = DeleteDirectory(desiredPath);
         if(debug){
-          cout << "Deleting dir " << desiredPath << endl;
+          cout << "Deleting dir " << currentPath << endl;
           cout << "Sucsess = " << del << endl;
           pause();
         }
 
         //Replace with new directory
-        int cpy = CopyDirectory(currentPath, desiredPath);
+        int cpy = CopyDirectory(desiredPath,currentPath);
         if(debug){
           //TODO Copy current to desired
           cout << "Current path" << currentPath << endl;
@@ -467,11 +470,9 @@ void downloadFiles()
   cout << endl;
   cout << "2: Paste 'locale=" << desiredLangCode << "' into the document (without the quotes) overwriting the" << endl;
   cout << "   existing text." << endl;
-  cout << "   NOTE: Keep a record of what the origional text was as you will need to" << endl;
-  cout << "   replace it later." << endl;
   cout << endl;
-  cout << "3: Open up the league of legends launcher and let the client download the new" << endl;
-  cout << "   files. This will download the korean versions of the files needed. Once" << endl;
+  cout << "3: Reopen the league of legends launcher and let the client download the new" << endl;
+  cout << "   files. This will download the new language versions of the files needed. Once" << endl;
   cout << "   completed you should have two folders in the" << endl;
   cout << "   '" << leaguePath << "\\RADS\\projects\\'" << endl;
   cout << "   folder, 'lol_game_client_" << desiredLangCode << "' and 'lol_game_client_" << currentLangCode << "'." << endl;
@@ -479,6 +480,8 @@ void downloadFiles()
   cout << "4: Once League of Legends has downloaded the alternate version close the League" << endl;
   cout << "   window and re-open " << leaguePath << "\\system\\locale.cfg and" << endl;
   cout << "   replace the text with what it was origionally ('locale=" << currentLangCode << "')."  << endl;
+  cout << endl;
+  cout << "5: Reopen the league of legends client again and it should download a smaller patch.";
   cout << endl;
   cout <<  "--------------------------------------------------------------------------------" << endl;
   pause();
