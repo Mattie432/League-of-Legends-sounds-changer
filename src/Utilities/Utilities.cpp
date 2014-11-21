@@ -13,6 +13,11 @@ void pause()
   system("pause");
 }
 
+void mySleep(){
+
+  system("sleep(2000)");
+}
+
 bool numeric_string_compare(const std::string& s1, const std::string& s2)
 {
     // handle empty strings...

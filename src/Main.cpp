@@ -3,6 +3,17 @@
 #include "FileActions/FileActions.hpp"
 #include "Utilities/Utilities.hpp"
 
+#include <windows.h>
+#include <stdio.h>
+#include <winuser.h>
+#include <windowsx.h>
+#include <time.h>
+#include <stdlib.h>
+#include <iostream>
+#include <conio.h>
+#include <iostream>
+#include <string>
+
 using namespace std;
 
 string* currentLangSelection(string);
@@ -279,23 +290,12 @@ void changeGameCharacter()
         string currentPath = searchVectorFor(champ, currentChamps);
         string desiredPath = searchVectorFor(champ, desiredChamps);
 
-        //Delete old directory
-        int del = DeleteDirectory(desiredPath);
-        if(debug){
-          cout << "Deleting dir " << currentPath << endl;
-          cout << "Sucsess = " << del << endl;
-          pause();
-        }
+        cout << "Copying " << desiredPath << " to " << currentPath << "." << endl;
 
-        //Replace with new directory
-        int cpy = CopyDirectory(desiredPath,currentPath);
-        if(debug){
-          //TODO Copy current to desired
-          cout << "Current path" << currentPath << endl;
-          cout << "Desired path" << desiredPath << endl;
-          cout << "Copy sucsess? = " << cpy << endl;
-          pause();
-        }
+        
+        ReplaceDirectory(currentPath,desiredPath);
+
+
       }
     }else {
       cout << "Could not find desired language folder : " << desiredClientFolder << endl;
@@ -371,6 +371,7 @@ void changeChampSelectSounds()
       bool ansCurrentLang = traveler.DirectoryExists((newPath + currentLangCode).c_str());
       bool ansDesiredLang = traveler.DirectoryExists((newPath + desiredLangCode).c_str());
 
+
       cout << "Currently changing the announcer sounds to " << desiredLangName << endl;
 
       if(ansCurrentLang == 1 && traveler.DirectoryExists((newPath + currentLangCode + "_BACKUP").c_str()) != 1){
@@ -384,20 +385,8 @@ void changeChampSelectSounds()
       }
 
       if(ansDesiredLang == 1){
-        //copy((newPath + desiredLangCode), (newPath + currentLangCode));;
-        cout << "Copying " << desiredLangCode << " to " << currentLangCode << "." << endl;
-
-        int del = DeleteDirectory(newPath + currentLangCode);
-        if(del != 0){
-          cout << "Error deleting " << currentLangCode << ", code: " << del << endl;
-        }
-        Sleep(2000);
-        int cpy = CopyDirectory(newPath + desiredLangCode, newPath + currentLangCode);
-        if(cpy != 0){
-          cout << "Error copying " << desiredLangCode << ", code: " << del << endl;
-        }else{
-          cout << "Copy complete" << endl;
-        }
+        //copy((newPath + desiredLangCode), (newPath + currentLangCode));
+        ReplaceDirectory(newPath + currentLangCode,newPath + desiredLangCode);
         cout << "Finished changing the champion select sounds." << endl << endl;
         cout <<  "--------------------------------------------------------------------------------" << endl;
       }else{
@@ -466,7 +455,8 @@ int soundSelection()
 void downloadFiles()
 {
   cout <<  "--------------------------------------------------------------------------------" << endl;
-  cout << "1: Go to " << leaguePath << "\\Rads\\system\\" << " and open up 'locale.cfg'" << endl;
+  cout << "1: Go to " << leaguePath << "\\Rads\\system\\" << " and open 'locale.cfg' in a" << endl;
+  cout << "   text editor." << endl;
   cout << endl;
   cout << "2: Paste 'locale=" << desiredLangCode << "' into the document (without the quotes) overwriting the" << endl;
   cout << "   existing text." << endl;
