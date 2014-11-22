@@ -56,6 +56,7 @@ void DirTraveler::travelDirectoryRecursiveReturnFolders(string directory, vector
 {
     // get the "root" directory's directories
     vector<string> fileList = travelDirectory(directory);
+
     // loop thru the list
     for (vector<string>::iterator i=fileList.begin(); i!=fileList.end(); ++i)
     {

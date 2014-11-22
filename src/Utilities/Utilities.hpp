@@ -20,5 +20,6 @@ bool numeric_string_compare(const std::string& s1, const std::string& s2);
 bool is_not_digit(char c);
 string searchVectorFor(string value, vector<string> vector);
 string BrowseFolder();
+string lowerCase(string str);
 
 #endif

@@ -94,3 +94,11 @@ string BrowseFolder()
   }
   return path_;
 }
+
+string lowerCase(string str){
+  std::string my_string(str);
+  for(unsigned int i = 0; i < my_string.length(); ++i) {
+      my_string[i] = tolower(my_string[i]);
+  }
+  return my_string;
+}

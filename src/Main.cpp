@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <iostream>
 #include <conio.h>
-#include <iostream>
 #include <string>
 
 using namespace std;
@@ -22,6 +21,7 @@ string BrowseFolder();
 void changeChampSelectSounds();
 void changeGameCharacter();
 void downloadFiles();
+void changeAnnouncerSounds();
 int soundSelection();
 void processTransfer();
 vector<string> findChampionFolders(string inDir);
@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
         desiredLangCode = "it_IT";
         desiredLangName = "Italian";
         leaguePath = "C:\\Games\\League of Legends";
-        soundInt = 2;
+        soundInt = 4;
         debug = true;
         processTransfer();
       }
@@ -208,6 +208,7 @@ void processTransfer(){
   if(soundInt >= 4){
     //need to do announcer sounds
     soundInt = soundInt - 4;
+    changeAnnouncerSounds();
   }
 
   if(soundInt >= 2){
@@ -225,7 +226,58 @@ void processTransfer(){
 }
 
 
+void changeAnnouncerSounds(){
+  vector<string> currentPath;
+  vector<string> desiredPath;
 
+  vector<string> foo;
+  vector<string> rejected;
+  traveler.travelDirectoryRecursiveReturnFiles(leaguePath,&foo);
+  //sort according to path folder numbers
+  sort(foo.begin(), foo.end(), numeric_string_compare);
+
+  for (int i=foo.size()-1; i>=2; i--){
+    string ppath = foo[i].c_str();
+    //cout << "Checking folder : " << folder << endl;
+
+    //look for announcer file
+    //Creats three lists of "announcer file"
+    if(ppath.find("Announcer") != std::string::npos | ppath.find("NPC_Map") != std::string::npos){
+      if(ppath.find(desiredLangCode) != std::string::npos | ppath.find(lowerCase(desiredLangCode)) != std::string::npos){
+        //its a desired path
+        desiredPath.push_back(ppath);
+      }else if(ppath.find(currentLangCode) != std::string::npos | ppath.find(lowerCase(currentLangCode)) != std::string::npos){
+        //its a current path (e.g. gb_GB)
+        currentPath.push_back(ppath);
+      }else{
+        rejected.push_back(ppath);
+      }
+    }
+  }
+
+  for(int i=0; i<desiredPath.size(); i++){
+    cout << "desired = " << desiredPath[i].c_str() << endl;
+  }
+
+  for(int i=0; i<currentPath.size(); i++){
+    cout << "current = " << currentPath[i].c_str() << endl;
+  }
+
+  cout << endl;
+  for(int i=0; i<rejected.size(); i++){
+    cout << "rejecte = " << rejected[i].c_str() << endl;
+  }
+
+  
+  for(int i=0; i<desiredPath.size(); i++){
+    string currDesiredPath = desiredPath[i];
+
+  }
+
+
+  pause();
+
+}
 
 //  Checks for duplicate champion folders and chooses the one with the highest verion number.
 vector<string> removeChampionFolderDuplicates(vector<string> origList){
@@ -292,7 +344,7 @@ void changeGameCharacter()
 
         cout << "Copying " << desiredPath << " to " << currentPath << "." << endl;
 
-        
+
         ReplaceDirectory(currentPath,desiredPath);
 
 
