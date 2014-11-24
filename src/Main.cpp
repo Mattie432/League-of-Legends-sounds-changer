@@ -255,28 +255,31 @@ void changeAnnouncerSounds(){
     }
   }
 
-  for(int i=0; i<desiredPath.size(); i++){
-    cout << "desired = " << desiredPath[i].c_str() << endl;
-  }
+    for(int i=0; i<desiredPath.size(); i++){
+        string item = desiredPath[i];
+        //Get file name
+        string fileName = stripFileName(item);
 
-  for(int i=0; i<currentPath.size(); i++){
-    cout << "current = " << currentPath[i].c_str() << endl;
-  }
+        if(debug){
+            cout << "Filenames = " << fileName << endl;
+        }
 
-  cout << endl;
-  for(int i=0; i<rejected.size(); i++){
-    cout << "rejecte = " << rejected[i].c_str() << endl;
-  }
+        for(string currItem : currentPath){
+            if(currItem.find(fileName)  != std::string::npos){
+                //found item in current folder
+                //replace with desired item
+                if(debug){
+                    cout << "Found match with " << currItem << endl;
+                }
+                cout << "Source = " << currItem << endl << "Destination = " << currItem << endl;
+                replaceFile(item, currItem);
 
-  
-  for(int i=0; i<desiredPath.size(); i++){
-    string currDesiredPath = desiredPath[i];
-
-  }
-
-
-  pause();
-
+                //remove found item from vector
+                currentPath.erase(std::remove(currentPath.begin(), currentPath.end(), currItem), currentPath.end());
+                break;
+            }
+        }
+    }
 }
 
 //  Checks for duplicate champion folders and chooses the one with the highest verion number.
@@ -344,9 +347,9 @@ void changeGameCharacter()
 
         cout << "Copying " << desiredPath << " to " << currentPath << "." << endl;
 
+            pause();
 
         ReplaceDirectory(currentPath,desiredPath);
-
 
       }
     }else {

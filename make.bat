@@ -1,6 +1,6 @@
 @echo off
 echo Staring compiler
-g++ src/Utilities/Utilities.cpp ^
+g++ -std=c++11 src/Utilities/Utilities.cpp ^
 src/DirTraveler/DirTraveler.cpp ^
 src/FileActions/FileActions.cpp ^
 src/Main.cpp ^

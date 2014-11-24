@@ -14,8 +14,14 @@ void pause()
 }
 
 void mySleep(){
+    cout << "Sleeping for 2s" <<endl;
+    Sleep(2000);
+}
 
-  system("sleep(2000)");
+string stripFileName(string path){
+    int indexOfLastSlash = path.find_last_of("/");
+    string fileName = path.substr(indexOfLastSlash+1,path.size());
+    return fileName;
 }
 
 bool numeric_string_compare(const std::string& s1, const std::string& s2)

@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <shlobj.h>
 #include <cstdlib>
+
 #include <vector>
 using namespace std;
 using std::string;
@@ -21,5 +22,6 @@ bool is_not_digit(char c);
 string searchVectorFor(string value, vector<string> vector);
 string BrowseFolder();
 string lowerCase(string str);
+string stripFileName(string path);
 
 #endif

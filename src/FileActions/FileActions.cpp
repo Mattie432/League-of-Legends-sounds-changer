@@ -135,18 +135,18 @@ int DeleteDirectory(const std::string &refcstrRootDirectory)
 int ReplaceDirectory(const std::string &dirToReplace, const std::string &dirToReplaceWith)
 {
   cout << "Copying " << dirToReplaceWith << " to " << dirToReplace << "." << endl;
-  cout << "dirToReplaceWith = " << dirToReplaceWith.empty() << endl;
+  cout << "dirToReplaceWith = " << dirToReplaceWith.empty() << endl << endl;
   if(dirToReplace != "" & dirToReplaceWith != "" & dirToReplace != "null" & dirToReplaceWith != "null"){
-
+      cout << "Deleting " << dirToReplace << endl;
     int del = DeleteDirectory(dirToReplace);
     if(del != 0){
       cout << "Error deleting " << dirToReplace << ", code: " << del << endl;
       pause();
     }
-    Sleep(2000);
+    mySleep();
     int cpy = CopyDirectory(dirToReplaceWith, dirToReplace);
     if(cpy != 0){
-      cout << "Error copying " << dirToReplaceWith << ", code: " << del << endl;
+      cout << "Error copying " << dirToReplaceWith << ", code: " << cpy << endl;
       pause();
     }else{
       cout << "Copy complete" << endl << "Code = " << cpy <<endl;
@@ -155,4 +155,28 @@ int ReplaceDirectory(const std::string &dirToReplace, const std::string &dirToRe
     cout << "Error! Null input!" <<endl;
     pause();
   }
+}
+
+int copyFile(string strSource, string strDestination){
+    return CopyFile(strSource.c_str(), strDestination.c_str(), TRUE);
+}
+
+int deleteFile(string strSource){
+    return DeleteFile(strSource.c_str());
+}
+
+
+void replaceFile(string strSource, string strDestination){
+    int del = deleteFile(strDestination);
+    if(del != 0){
+      cout << "Error deleting " << strDestination << ", code: " << del << endl;
+      pause();
+    }
+    int cpy = copyFile(strSource, strDestination);
+    if(cpy != 0){
+      cout << "Error copying " << strSource << ", code: " << cpy << endl;
+      pause();
+    }else{
+      cout << "Copy complete" << endl << "Code = " << cpy <<endl;
+    }
 }
