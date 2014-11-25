@@ -13,7 +13,7 @@ void pause()
   system("pause");
 }
 
-void mySleep(myTime){
+void mySleep(int myTime){
     Sleep(myTime);
 }
 

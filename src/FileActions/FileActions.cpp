@@ -169,13 +169,14 @@ int deleteFile(string strSource){
 
 void replaceFile(string strSource, string strDestination){
     int del = deleteFile(strDestination);
-    if(del != 0){
-      cout << "Error deleting " << strDestination << ", code: " << del << endl;
+    if(del == 0){
+      cout << "Error deleting " << strDestination << endl << "         code: " << del << endl;
       pause();
     }
+    mySleep(1000);
     int cpy = copyFile(strSource, strDestination);
-    if(cpy != 0){
-      cout << "Error copying " << strSource << ", code: " << cpy << endl;
+    if(cpy == 0){
+      cout << "Error copying " << strSource << endl << "               code: " << cpy << endl;
       pause();
     }else{
       cout << "Copy complete" << endl << "Code = " << cpy <<endl;

@@ -15,7 +15,7 @@ using namespace std;
 using std::string;
 
 void cls();
-void mySleep();
+void mySleep(int myTime);
 void pause();
 bool numeric_string_compare(const std::string& s1, const std::string& s2);
 bool is_not_digit(char c);

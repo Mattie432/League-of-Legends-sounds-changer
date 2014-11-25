@@ -165,7 +165,6 @@ int soundInt;
 int main(int argc, char* argv[])
 {
     for(int i = 0; i < argc; i++){
-      cout << "argv[" << i << "] = " << argv[i] << endl;
       string str = argv[i];
       if (str == "debug"){
         cout << "Im here" << endl;
@@ -174,7 +173,7 @@ int main(int argc, char* argv[])
         desiredLangCode = "ko_KR";
         desiredLangName = "Korean";
         leaguePath = "C:\\Games\\League of Legends";
-        soundInt = 2;
+        soundInt = 7;
         debug = true;
         processTransfer();
       }
@@ -208,18 +207,28 @@ void processTransfer(){
   if(soundInt >= 4){
     //need to do announcer sounds
     soundInt = soundInt - 4;
+    cout << endl << endl;
+    cout <<  "--------------------------------------------------------------------------------" << endl;
+    cout << "Current operation : Changing the announcer sounds." << endl << endl;
     changeAnnouncerSounds();
+    cout << "Status - Complete : Changing the announcer sounds." << endl < endl;
   }
 
   if(soundInt >= 2){
     //need to do in game character sounds
+    cout <<  "--------------------------------------------------------------------------------" << endl;
+    cout << "Current operation : Changing the in-game character sounds." << endl << endl;
     changeGameCharacter();
+    cout << "Status - Complete : Changing the in-game character sounds." << endl < endl;
     soundInt = soundInt - 2;
   }
 
   if(soundInt >= 1){
     //need to do champ select character sounds
+    cout <<  "--------------------------------------------------------------------------------" << endl;
+    cout << "Current operation : Changing champion select champion sounds." << endl << endl;
     changeChampSelectSounds();
+    cout << "Status - Complete : Changing champion select champion sounds." << endl < endl;
     soundInt = soundInt - 1;
   }
 
@@ -271,11 +280,12 @@ void changeAnnouncerSounds(){
                 if(debug){
                     cout << "Found match with " << dstItem << endl;
                 }
-                cout << "Source = " << srcItem << endl << "Destination = " << dstItem << endl;
+                cout << "     Source = " << srcItem << endl << "Destination = " << dstItem << endl;
                 replaceFile(srcItem, dstItem);
 
                 //remove found srcItem from vector
                 currentPath.erase(std::remove(currentPath.begin(), currentPath.end(), dstItem), currentPath.end());
+                cout << endl;
                 break;
             }
         }
@@ -317,7 +327,6 @@ vector<string> removeChampionFolderDuplicates(vector<string> origList){
 
   return newList;
 }
-
 
 
 void changeGameCharacter()
@@ -506,6 +515,8 @@ int soundSelection()
 void downloadFiles()
 {
   cout <<  "--------------------------------------------------------------------------------" << endl;
+  cout <<  "Please ensure that this program is running as administrator!!!" << endl;
+  cout << endl;
   cout << "1: Go to " << leaguePath << "\\Rads\\system\\" << " and open 'locale.cfg' in a" << endl;
   cout << "   text editor." << endl;
   cout << endl;
