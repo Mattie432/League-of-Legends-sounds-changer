@@ -171,10 +171,10 @@ int main(int argc, char* argv[])
         cout << "Im here" << endl;
         currentLangCode = "en_GB";
         currentLangName = "English";
-        desiredLangCode = "it_IT";
-        desiredLangName = "Italian";
+        desiredLangCode = "ko_KR";
+        desiredLangName = "Korean";
         leaguePath = "C:\\Games\\League of Legends";
-        soundInt = 4;
+        soundInt = 6;
         debug = true;
         processTransfer();
       }
@@ -256,26 +256,26 @@ void changeAnnouncerSounds(){
   }
 
     for(int i=0; i<desiredPath.size(); i++){
-        string item = desiredPath[i];
+        string srcItem = desiredPath[i];
         //Get file name
-        string fileName = stripFileName(item);
+        string fileName = stripFileName(srcItem);
 
         if(debug){
             cout << "Filenames = " << fileName << endl;
         }
 
-        for(string currItem : currentPath){
-            if(currItem.find(fileName)  != std::string::npos){
-                //found item in current folder
-                //replace with desired item
+        for(string dstItem : currentPath){
+            if(dstItem.find(fileName)  != std::string::npos){
+                //found srcItem in current folder
+                //replace with desired srcItem
                 if(debug){
-                    cout << "Found match with " << currItem << endl;
+                    cout << "Found match with " << dstItem << endl;
                 }
-                cout << "Source = " << currItem << endl << "Destination = " << currItem << endl;
-                replaceFile(item, currItem);
+                cout << "Source = " << srcItem << endl << "Destination = " << dstItem << endl;
+                replaceFile(srcItem, dstItem);
 
-                //remove found item from vector
-                currentPath.erase(std::remove(currentPath.begin(), currentPath.end(), currItem), currentPath.end());
+                //remove found srcItem from vector
+                currentPath.erase(std::remove(currentPath.begin(), currentPath.end(), dstItem), currentPath.end());
                 break;
             }
         }
@@ -347,7 +347,7 @@ void changeGameCharacter()
 
         cout << "Copying " << desiredPath << " to " << currentPath << "." << endl;
 
-            pause();
+        pause();
 
         ReplaceDirectory(currentPath,desiredPath);
 
