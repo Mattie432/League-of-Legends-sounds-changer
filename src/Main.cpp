@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
         desiredLangCode = "ko_KR";
         desiredLangName = "Korean";
         leaguePath = "C:\\Games\\League of Legends";
-        soundInt = 6;
+        soundInt = 2;
         debug = true;
         processTransfer();
       }
@@ -344,10 +344,6 @@ void changeGameCharacter()
         cout << endl << "Current champ: " << champ << endl;
         string currentPath = searchVectorFor(champ, currentChamps);
         string desiredPath = searchVectorFor(champ, desiredChamps);
-
-        cout << "Copying " << desiredPath << " to " << currentPath << "." << endl;
-
-        pause();
 
         ReplaceDirectory(currentPath,desiredPath);
 

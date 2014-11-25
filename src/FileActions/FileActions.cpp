@@ -134,25 +134,26 @@ int DeleteDirectory(const std::string &refcstrRootDirectory)
 
 int ReplaceDirectory(const std::string &dirToReplace, const std::string &dirToReplaceWith)
 {
-  cout << "Copying " << dirToReplaceWith << " to " << dirToReplace << "." << endl;
-  cout << "dirToReplaceWith = " << dirToReplaceWith.empty() << endl << endl;
+    cout << "Copying  " << dirToReplaceWith << endl << "      to " << dirToReplace << endl;
   if(dirToReplace != "" & dirToReplaceWith != "" & dirToReplace != "null" & dirToReplaceWith != "null"){
-      cout << "Deleting " << dirToReplace << endl;
+
+    cout << "Deleting " << dirToReplace << endl;
     int del = DeleteDirectory(dirToReplace);
+
     if(del != 0){
-      cout << "Error deleting " << dirToReplace << ", code: " << del << endl;
+      cout << "Error deleting " << dirToReplace << endl << "code: " << del << endl << endl;
       pause();
     }
-    mySleep();
+    mySleep(1000);
     int cpy = CopyDirectory(dirToReplaceWith, dirToReplace);
     if(cpy != 0){
-      cout << "Error copying " << dirToReplaceWith << ", code: " << cpy << endl;
+      cout << "Error copying " << dirToReplaceWith << endl << "code: " << cpy << endl << endl;
       pause();
     }else{
-      cout << "Copy complete" << endl << "Code = " << cpy <<endl;
+      cout << "Copy complete" << endl << "Code = " << cpy << endl << endl;
     }
   }else{
-    cout << "Error! Null input!" <<endl;
+    cout << "Error! Null input!" << endl;
     pause();
   }
 }

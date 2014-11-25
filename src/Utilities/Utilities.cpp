@@ -13,9 +13,8 @@ void pause()
   system("pause");
 }
 
-void mySleep(){
-    cout << "Sleeping for 2s" <<endl;
-    Sleep(2000);
+void mySleep(myTime){
+    Sleep(myTime);
 }
 
 string stripFileName(string path){
