@@ -135,6 +135,7 @@ int DeleteDirectory(const std::string &refcstrRootDirectory)
 int ReplaceDirectory(const std::string &dirToReplace, const std::string &dirToReplaceWith)
 {
     cout << "Copying  " << dirToReplaceWith << endl << "      to " << dirToReplace << endl;
+    pause();
   if(dirToReplace != "" & dirToReplaceWith != "" & dirToReplace != "null" & dirToReplaceWith != "null"){
 
     cout << "Deleting " << dirToReplace << endl;

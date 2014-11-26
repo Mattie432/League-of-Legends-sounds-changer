@@ -173,7 +173,7 @@ int main(int argc, char* argv[])
         desiredLangCode = "ko_KR";
         desiredLangName = "Korean";
         leaguePath = "C:\\Games\\League of Legends";
-        soundInt = 7;
+        soundInt = 2;
         debug = true;
         processTransfer();
       }
@@ -209,26 +209,26 @@ void processTransfer(){
     soundInt = soundInt - 4;
     cout << endl << endl;
     cout <<  "--------------------------------------------------------------------------------" << endl;
-    cout << "Current operation : Changing the announcer sounds." << endl << endl;
+    cout << "Current operation" << endl << "         Changing the announcer sounds." << endl << endl;
     changeAnnouncerSounds();
-    cout << "Status - Complete : Changing the announcer sounds." << endl < endl;
+    cout << "Status - Complete" << endl << "         Changing the announcer sounds." << endl << endl;
   }
 
   if(soundInt >= 2){
     //need to do in game character sounds
     cout <<  "--------------------------------------------------------------------------------" << endl;
-    cout << "Current operation : Changing the in-game character sounds." << endl << endl;
+    cout << "Current operation" << endl << "         Changing the in-game character sounds." << endl << endl;
     changeGameCharacter();
-    cout << "Status - Complete : Changing the in-game character sounds." << endl < endl;
+    cout << "Status - Complete" << endl << "         Changing the in-game character sounds." << endl << endl;
     soundInt = soundInt - 2;
   }
 
   if(soundInt >= 1){
     //need to do champ select character sounds
     cout <<  "--------------------------------------------------------------------------------" << endl;
-    cout << "Current operation : Changing champion select champion sounds." << endl << endl;
+    cout << "Current operation" << endl << "         Changing champion select champion sounds." << endl << endl;
     changeChampSelectSounds();
-    cout << "Status - Complete : Changing champion select champion sounds." << endl < endl;
+    cout << "Status - Complete" << endl << "         Changing champion select champion sounds." << endl << endl;
     soundInt = soundInt - 1;
   }
 
@@ -328,8 +328,46 @@ vector<string> removeChampionFolderDuplicates(vector<string> origList){
   return newList;
 }
 
-
 void changeGameCharacter()
+{
+  string currentClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + currentLangCode ;
+  string desiredClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + desiredLangCode ;
+
+  cout << "Folder 1 " << currentClientFolder << endl;
+  cout << "Folder 2 " << desiredClientFolder << endl;
+
+  if(traveler.DirectoryExists(currentClientFolder.c_str())){
+    if(traveler.DirectoryExists(desiredClientFolder.c_str())){
+
+      vector<string> currentChampsWithDuplicates = findChampionFolders(currentClientFolder);
+      //vector<string> currentChamps = removeChampionFolderDuplicates(currentChampsWithDuplicates);
+
+      vector<string> desiredChampsWithDuplicates = findChampionFolders(desiredClientFolder);
+      //vector<string> desiredChamps = removeChampionFolderDuplicates(desiredChampsWithDuplicates);
+
+      int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
+
+      for(int i=0; i<numOfChamps; i++){
+        string champ = champions[i];
+        cout << endl << "Current champ: " << champ << endl;
+        string currentPath = searchVectorFor(champ, desiredChampsWithDuplicates);
+        string desiredPath = searchVectorFor(champ, desiredChampsWithDuplicates);
+
+        ReplaceDirectory(currentPath,desiredPath);
+
+      }
+    }else {
+      cout << "Could not find desired language folder : " << desiredClientFolder << endl;
+      pause();
+    }
+  }else{
+    cout << "Could not find current language folder : " << currentClientFolder << endl;
+    pause();
+
+  }
+}
+
+void changeGameCharacter_OLD()
 {
   string currentClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + currentLangCode ;
   string desiredClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + desiredLangCode ;
@@ -371,6 +409,45 @@ void changeGameCharacter()
 
 //finds all the champion subfolders in a folder
 vector<string> findChampionFolders(string inDir){
+  //both folders exist;
+  int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
+  cout << "Size of champ array is " << numOfChamps << endl;
+  vector<string> listOfDoneChamps;
+
+  //Array of fodlers in current folder
+  vector<string> foo;
+  traveler.travelDirectoryRecursiveReturnFiles(inDir ,&foo);
+  //Look at each folder for champion folders
+  for (int i=2; i<foo.size(); ++i){
+    string folder = foo[i].c_str();
+    //cout << "Checking folder : " << folder << endl;
+
+    //Check if its a champion folder
+    for (int i=0; i<numOfChamps; i++){
+      string name = champions[i];
+      if(folder.find(name) != std::string::npos){
+        //if found exit loop
+        //i = numOfChamps;
+        //cout << "Found champ folder for " << name << endl;
+        string folderPath = folder;
+        //cout << "At path : " << folderPath << endl << endl;
+        if(folderPath.find(".wpk") != std::string::npos || folderPath.find(".bnk") != std::string::npos){
+          cout << "Adding " << folderPath << endl;
+          pause();
+          listOfDoneChamps.push_back(folderPath);
+      }
+
+      }
+    }
+  }
+
+  return listOfDoneChamps;
+
+}
+
+
+//finds all the champion subfolders in a folder
+vector<string> findChampionFolders_OLD(string inDir){
   //both folders exist;
   int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
   cout << "Size of champ array is " << numOfChamps << endl;
