@@ -345,16 +345,24 @@ void changeGameCharacter()
       vector<string> desiredChampsWithDuplicates = findChampionFolders(desiredClientFolder);
       //vector<string> desiredChamps = removeChampionFolderDuplicates(desiredChampsWithDuplicates);
 
-      int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
-
-      for(int i=0; i<numOfChamps; i++){
-        string champ = champions[i];
-        cout << endl << "Current champ: " << champ << endl;
-        string currentPath = searchVectorFor(champ, desiredChampsWithDuplicates);
-        string desiredPath = searchVectorFor(champ, desiredChampsWithDuplicates);
-
-        ReplaceDirectory(currentPath,desiredPath);
-
+      for(int i=0; i<currentChampsWithDuplicates.size(); i++){
+        string filePath = desiredChampsWithDuplicates[i];
+        string fileName = stripFileName(filePath);
+        cout << "Working with file : " << fileName << endl;
+        cout << "Orig Path    : " << filePath << endl;
+        string matchedFilePath = searchVectorFor(fileName,currentChampsWithDuplicates);
+        cout << "Matched path : " << matchedFilePath << endl;
+        if(matchedFilePath != "" | matchedFilePath == "null"){
+          //Found a match, copy accross
+          replaceFile(filePath, matchedFilePath);
+        }else{
+          cout << "Error, could not find a file match for" << endl << filePath << endl;
+          pause();
+        }
+        float percentage = ((i / (currentChampsWithDuplicates.size()-1))*100.0);
+        cout << "i=" << i << "currentChampsWithDuplicates.size()=" << currentChampsWithDuplicates.size() << endl;
+        cout << percentage << "\% Complete" << endl << endl;
+        pause();
       }
     }else {
       cout << "Could not find desired language folder : " << desiredClientFolder << endl;
@@ -363,7 +371,6 @@ void changeGameCharacter()
   }else{
     cout << "Could not find current language folder : " << currentClientFolder << endl;
     pause();
-
   }
 }
 
@@ -389,6 +396,7 @@ void changeGameCharacter_OLD()
       for(int i=0; i<numOfChamps; i++){
         string champ = champions[i];
         cout << endl << "Current champ: " << champ << endl;
+
         string currentPath = searchVectorFor(champ, currentChamps);
         string desiredPath = searchVectorFor(champ, desiredChamps);
 
@@ -432,8 +440,7 @@ vector<string> findChampionFolders(string inDir){
         string folderPath = folder;
         //cout << "At path : " << folderPath << endl << endl;
         if(folderPath.find(".wpk") != std::string::npos || folderPath.find(".bnk") != std::string::npos){
-          cout << "Adding " << folderPath << endl;
-          pause();
+          //cout << "Adding " << folderPath << endl;
           listOfDoneChamps.push_back(folderPath);
       }
 
