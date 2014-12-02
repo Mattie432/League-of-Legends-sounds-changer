@@ -381,47 +381,6 @@ void changeGameCharacter()
   }
 }
 
-void changeGameCharacter_OLD()
-{
-  string currentClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + currentLangCode ;
-  string desiredClientFolder = leaguePath + "\\RADS\\projects\\lol_game_client_" + desiredLangCode ;
-
-  cout << "Folder 1 " << currentClientFolder << endl;
-  cout << "Folder 2 " << desiredClientFolder << endl;
-
-  if(traveler.DirectoryExists(currentClientFolder.c_str())){
-    if(traveler.DirectoryExists(desiredClientFolder.c_str())){
-
-      vector<string> currentChampsWithDuplicates = findChampionFolders(currentClientFolder);
-      vector<string> currentChamps = removeChampionFolderDuplicates(currentChampsWithDuplicates);
-
-      vector<string> desiredChampsWithDuplicates = findChampionFolders(desiredClientFolder);
-      vector<string> desiredChamps = removeChampionFolderDuplicates(desiredChampsWithDuplicates);
-
-      int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
-
-      for(int i=0; i<numOfChamps; i++){
-        string champ = champions[i];
-        cout << endl << "Current champ: " << champ << endl;
-
-        string currentPath = searchVectorFor(champ, currentChamps);
-        string desiredPath = searchVectorFor(champ, desiredChamps);
-
-        ReplaceDirectory(currentPath,desiredPath);
-
-      }
-    }else {
-      cout << "Could not find desired language folder : " << desiredClientFolder << endl;
-      pause();
-    }
-  }else{
-    cout << "Could not find current language folder : " << currentClientFolder << endl;
-    pause();
-
-  }
-}
-
-
 //finds all the champion subfolders in a folder
 vector<string> findChampionFolders(string inDir){
   //both folders exist;
@@ -459,52 +418,6 @@ vector<string> findChampionFolders(string inDir){
   return listOfDoneChamps;
 
 }
-
-
-//finds all the champion subfolders in a folder
-vector<string> findChampionFolders_OLD(string inDir){
-  //both folders exist;
-  int numOfChamps = sizeof( champions ) / sizeof( champions[ 0 ] );
-  cout << "Size of champ array is " << numOfChamps << endl;
-  vector<string> listOfDoneChamps;
-
-  //Array of fodlers in current folder
-  vector<string> foo;
-  traveler.travelDirectoryRecursiveReturnFolders(inDir ,&foo);
-  //Look at each folder for champion folders
-  for (int i=2; i<foo.size(); ++i){
-    string folder = foo[i].c_str();
-    //cout << "Checking folder : " << folder << endl;
-
-    //Check if its a champion folder
-    for (int i=0; i<numOfChamps; i++){
-      string name = champions[i];
-      if(folder.find(name) != std::string::npos){
-        //if found exit loop
-        i = numOfChamps;
-        //cout << "Found champ folder for " << name << endl;
-        string folderPath = folder.substr(0,folder.find(name)) + name;
-        //cout << "At path : " << folderPath << endl << endl;
-
-        if (find(listOfDoneChamps.begin(), listOfDoneChamps.end(), folderPath) == listOfDoneChamps.end()){
-          //NOt found in listOfDoneChamps
-          cout << "Adding " << folderPath << endl;
-          listOfDoneChamps.push_back(folderPath);
-        }
-      }
-    }
-  }
-
-  if(listOfDoneChamps.size() != numOfChamps){
-    cout << "ERROR: Number of champs too low, only found " << listOfDoneChamps.size() << " number of champion folders" << endl;
-  }else{
-    cout << "Found all champion folders in : " << inDir << endl;
-  }
-
-  return listOfDoneChamps;
-
-}
-
 
 void changeChampSelectSounds()
 {
