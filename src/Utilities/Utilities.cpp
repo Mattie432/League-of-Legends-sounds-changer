@@ -3,6 +3,13 @@
 using namespace std;
 
 
+
+void remove_duplicates(vector<string>& vec)
+{
+  std::sort(vec.begin(), vec.end());
+  vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
+}
+
 // clears the shell
 void cls(){
   system("cls");

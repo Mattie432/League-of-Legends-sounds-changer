@@ -4,9 +4,11 @@
 #include <sstream>
 #include <string>
 #include <unistd.h>
+#include <set>
 #include <iostream>
 #include <windows.h>
 #include <algorithm>
+#include <vector>
 #include <shlobj.h>
 #include <cstdlib>
 
@@ -23,5 +25,5 @@ string searchVectorFor(string value, vector<string> vector);
 string BrowseFolder();
 string lowerCase(string str);
 string stripFileName(string path);
-
+void remove_duplicates(vector<string>& vec);
 #endif

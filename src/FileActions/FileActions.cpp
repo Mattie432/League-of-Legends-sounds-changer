@@ -174,7 +174,7 @@ void replaceFile(string strSource, string strDestination){
       cout << "Error deleting " << strDestination << endl << "         code: " << del << endl;
       pause();
     }
-    mySleep(1000);
+    //mySleep(1000);
     int cpy = copyFile(strSource, strDestination);
     if(cpy == 0){
       cout << "Error copying " << strSource << endl << "               code: " << cpy << endl;

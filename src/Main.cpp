@@ -344,14 +344,23 @@ void changeGameCharacter()
 
       vector<string> desiredChampsWithDuplicates = findChampionFolders(desiredClientFolder);
       //vector<string> desiredChamps = removeChampionFolderDuplicates(desiredChampsWithDuplicates);
+      int s = desiredChampsWithDuplicates.size();
 
-      for(int i=0; i<currentChampsWithDuplicates.size(); i++){
+
+      for(int i=0; i < s; i++){
+
+
         string filePath = desiredChampsWithDuplicates[i];
         string fileName = stripFileName(filePath);
         cout << "Working with file : " << fileName << endl;
         cout << "Orig Path    : " << filePath << endl;
         string matchedFilePath = searchVectorFor(fileName,currentChampsWithDuplicates);
         cout << "Matched path : " << matchedFilePath << endl;
+
+        float percentage = 100*(i+1)/currentChampsWithDuplicates.size();
+        cout << "i=" << i << "currentChampsWithDuplicates.size()=" << s << endl;
+        cout << endl << percentage << "\% Complete" << endl;
+
         if(matchedFilePath != "" | matchedFilePath == "null"){
           //Found a match, copy accross
           replaceFile(filePath, matchedFilePath);
@@ -359,10 +368,8 @@ void changeGameCharacter()
           cout << "Error, could not find a file match for" << endl << filePath << endl;
           pause();
         }
-        float percentage = ((i / (currentChampsWithDuplicates.size()-1))*100.0);
-        cout << "i=" << i << "currentChampsWithDuplicates.size()=" << currentChampsWithDuplicates.size() << endl;
-        cout << percentage << "\% Complete" << endl << endl;
-        pause();
+        cout << endl;
+        //pause();
       }
     }else {
       cout << "Could not find desired language folder : " << desiredClientFolder << endl;
@@ -441,6 +448,7 @@ vector<string> findChampionFolders(string inDir){
         //cout << "At path : " << folderPath << endl << endl;
         if(folderPath.find(".wpk") != std::string::npos || folderPath.find(".bnk") != std::string::npos){
           //cout << "Adding " << folderPath << endl;
+
           listOfDoneChamps.push_back(folderPath);
       }
 
@@ -543,10 +551,8 @@ void changeChampSelectSounds()
 
 }
 
-
 int soundSelection()
 {
-
   string sounds[3] = {
     "Champion select character sounds",
     "In Game character sounds",
