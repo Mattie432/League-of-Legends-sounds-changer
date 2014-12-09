@@ -29,6 +29,7 @@ vector<string> findChampionFolders(string inDir);
 //global vars
 DirTraveler traveler;
 bool debug = false;
+bool testing = false;
 string leaguePath;
 string currentLangName;
 string currentLangCode;
@@ -166,7 +167,7 @@ int main(int argc, char* argv[])
 {
     for(int i = 0; i < argc; i++){
       string str = argv[i];
-      if (str == "debug"){
+      if (str == "testing"){
         cout << "Im here" << endl;
         currentLangCode = "en_GB";
         currentLangName = "English";
@@ -174,12 +175,14 @@ int main(int argc, char* argv[])
         desiredLangName = "Korean";
         leaguePath = "C:\\Games\\League of Legends";
         soundInt = 2;
-        debug = true;
+        testing = true;
         processTransfer();
+      }else if(str == "debug"){
+        debug = true;
       }
     }
 
-    if (debug == false){
+    if (testing == true){
       string *currentLang = currentLangSelection("CURRENT");
       currentLangName = currentLang[0];
       currentLangCode = currentLang[1];
