@@ -1,4 +1,6 @@
 @echo off
+echo Incrementing version.
+
 echo Staring compiler
 g++ -std=c++11 src/Utilities/Utilities.cpp ^
 src/DirTraveler/DirTraveler.cpp ^

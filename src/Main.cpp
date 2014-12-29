@@ -22,6 +22,7 @@ void changeChampSelectSounds();
 void changeGameCharacter();
 void downloadFiles();
 void changeAnnouncerSounds();
+void startInteraction();
 int soundSelection();
 void processTransfer();
 vector<string> findChampionFolders(string inDir);
@@ -34,6 +35,7 @@ string leaguePath;
 string currentLangName;
 string currentLangCode;
 string desiredLangName;
+string version = "1.00";
 string desiredLangCode;
 string champions[] = {
   "Aatrox",
@@ -110,6 +112,7 @@ string champions[] = {
   "Pantheon",
   "Poppy",
   "Quinn",
+  "RekSai",
   "Rammus",
   "Renekton",
   "Rengar",
@@ -165,45 +168,72 @@ int soundInt;
 
 int main(int argc, char* argv[])
 {
-    for(int i = 0; i < argc; i++){
-      string str = argv[i];
-      if (str == "testing"){
-        cout << "Im here" << endl;
-        currentLangCode = "en_GB";
-        currentLangName = "English";
-        desiredLangCode = "ko_KR";
-        desiredLangName = "Korean";
-        leaguePath = "C:\\Games\\League of Legends";
-        soundInt = 2;
-        testing = true;
-        processTransfer();
-      }else if(str == "debug"){
-        debug = true;
-      }
+  for(int i = 0; i < argc; i++){
+    string str = argv[i];
+    if (str == "testing"){
+      cout << "Im here" << endl;
+      currentLangCode = "en_GB";
+      currentLangName = "English";
+      desiredLangCode = "ko_KR";
+      desiredLangName = "Korean";
+      leaguePath = "C:\\Games\\League of Legends";
+      soundInt = 2;
+      testing = true;
+    }else if(str == "debug"){
+      debug = true;
     }
+  }
 
-    if (testing == true){
-      string *currentLang = currentLangSelection("CURRENT");
-      currentLangName = currentLang[0];
-      currentLangCode = currentLang[1];
-      cls();
-      string *desiredLang = currentLangSelection("DESIRED");
-      desiredLangName = desiredLang[0];
-      desiredLangCode = desiredLang[1];
-      cls();
-      leaguePath = getLeagueFolderPath();
-      cls();
-      downloadFiles();
-      cls();
-      soundInt = soundSelection();
-      cls();
-      processTransfer();
-    }
-    cout << "At the end" << endl;
-    pause();
+  if (testing == true){
+    processTransfer();
     return 0;
+  }else{
+    //normal start
+    startInteraction();
+  }
+  cout << "At the end" << endl;
+  pause();
+  return 0;
 }
 
+void startInteraction(){
+
+  cout << "Welcome to version " << version << " of the 'League of Legends' sound changer" <<endl;
+  cout << "created by Mattie432" << endl << endl;
+  cout << "Options:" << endl << " 1: Open about page" << endl << " 2: Start program" << endl << endl;
+
+  int number;
+  while ((cout << "Please enter a number ")
+         && (!(cin >> number) || number < 1 || number > 2)) {
+    cout << "That's not a valid input. " << endl;
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+  }
+
+  if(number == 1){
+    ShellExecute(NULL, "open", "https://mattie432.com/aboutSoftware/",
+            NULL, NULL, SW_SHOWNORMAL);
+    cls();
+    startInteraction();
+  }else if(number == 2){
+    cls();
+    string *currentLang = currentLangSelection("CURRENT");
+    currentLangName = currentLang[0];
+    currentLangCode = currentLang[1];
+    cls();
+    string *desiredLang = currentLangSelection("DESIRED");
+    desiredLangName = desiredLang[0];
+    desiredLangCode = desiredLang[1];
+    cls();
+    leaguePath = getLeagueFolderPath();
+    cls();
+    downloadFiles();
+    cls();
+    soundInt = soundSelection();
+    cls();
+    processTransfer();
+  }
+}
 
 
 void processTransfer(){
