@@ -11,5 +11,5 @@ echo:
 SET Input=
 SET /P Input="Start the compiled program? (y/n)"
 
-IF /I %Input%==y start League_of_Legends_sound_changer.exe debug testing
+IF /I %Input%==y start League_of_Legends_sound_changer.exe
 exit
